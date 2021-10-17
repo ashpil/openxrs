@@ -1020,6 +1020,19 @@ impl Parser {
                 handle!(#ident);
             }
         });
+        
+        let out_trait = quote! {
+            pub trait BaseOutput {
+                fn base_output() -> MaybeUninit<Self> where Self: Sized;
+            }
+
+            impl<T: Default> BaseOutput for T {
+                #[inline]
+                fn base_output() -> MaybeUninit<Self> {
+                    MaybeUninit::<Self>::new(Self::default())
+                }
+            }
+        };
 
         let structs = self.structs.iter().map(|(name, s)| {
             let ident = xr_ty_name(name);
@@ -1044,6 +1057,34 @@ impl Parser {
                 format!("See {}", self.doc_link(name))
             };
             let conditions = conditions(name, s.extension.as_ref().map(|x| &x[..]));
+
+            let out_impl = if let Some(ty) = &s.ty {
+                // are there more cases like this or is it fine to hard code?
+                if s.mut_next || ty == "XR_TYPE_EVENT_DATA_BUFFER" {
+                    let conditions2 = conditions.clone();
+                    quote! {
+                        #conditions2
+                        impl BaseOutput for #ident {
+                            #[inline]
+                            fn base_output() -> MaybeUninit<Self> {
+                                let mut x = MaybeUninit::<Self>::uninit();
+                                unsafe {
+                                    (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                                        ty: Self::TYPE,
+                                        next: std::ptr::null_mut(),
+                                    });
+                                }
+                                x
+                            }
+                        }
+                    }
+                } else {
+                    quote! {}
+                }
+            } else {
+                quote! {}
+            };
+
             let ty = if let Some(ref ty) = s.ty {
                 let conditions2 = conditions.clone();
                 let ty = xr_enum_value_name("XrStructureType", ty);
@@ -1092,6 +1133,7 @@ impl Parser {
                     #(#members)*
                 }
                 #ty
+                #out_impl
             }
         });
 
@@ -1188,6 +1230,7 @@ impl Parser {
             pub const CURRENT_API_VERSION: Version = Version::new(#major, #minor, #patch);
 
             #(#consts)*
+            #out_trait
             #(#enums)*
             #(#bitmasks)*
             #(#handles)*

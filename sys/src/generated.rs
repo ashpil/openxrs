@@ -30,6 +30,17 @@ pub const MAX_LOCALIZED_ACTION_NAME_SIZE: usize = 128usize;
 pub const MIN_COMPOSITION_LAYERS_SUPPORTED: usize = 16usize;
 pub const MAX_CONTROLLER_MODEL_NODE_NAME_SIZE_MSFT: usize = 64usize;
 pub const MAX_AUDIO_DEVICE_STR_SIZE_OCULUS: usize = 128usize;
+pub trait BaseOutput {
+    fn base_output() -> MaybeUninit<Self>
+    where
+        Self: Sized;
+}
+impl<T: Default> BaseOutput for T {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        MaybeUninit::<Self>::new(Self::default())
+    }
+}
 #[doc = "Structure type enumerant - see [XrStructureType](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrStructureType)"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -1981,6 +1992,19 @@ impl ApiLayerProperties {
         x
     }
 }
+impl BaseOutput for ApiLayerProperties {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrExtensionProperties](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrExtensionProperties)"]
@@ -2000,6 +2024,19 @@ impl ExtensionProperties {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ExtensionProperties {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2055,6 +2092,19 @@ impl InstanceProperties {
         x
     }
 }
+impl BaseOutput for InstanceProperties {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSystemGetInfo](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSystemGetInfo)"]
@@ -2088,6 +2138,19 @@ impl SystemProperties {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SystemProperties {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2293,6 +2356,19 @@ impl SwapchainImageOpenGLKHR {
         x
     }
 }
+impl BaseOutput for SwapchainImageOpenGLKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSwapchainImageOpenGLESKHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSwapchainImageOpenGLESKHR) - defined by [XR_KHR_opengl_es_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_opengl_es_enable)"]
@@ -2316,6 +2392,19 @@ impl SwapchainImageOpenGLESKHR {
         x
     }
 }
+impl BaseOutput for SwapchainImageOpenGLESKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSwapchainImageVulkanKHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSwapchainImageVulkanKHR) - defined by [XR_KHR_vulkan_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_vulkan_enable)"]
@@ -2334,6 +2423,19 @@ impl SwapchainImageVulkanKHR {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SwapchainImageVulkanKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2364,6 +2466,20 @@ impl SwapchainImageD3D11KHR {
         x
     }
 }
+#[cfg(windows)]
+impl BaseOutput for SwapchainImageD3D11KHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSwapchainImageD3D12KHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSwapchainImageD3D12KHR) - defined by [XR_KHR_D3D12_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_D3D12_enable)"]
@@ -2384,6 +2500,20 @@ impl SwapchainImageD3D12KHR {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+#[cfg(windows)]
+impl BaseOutput for SwapchainImageD3D12KHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2469,6 +2599,19 @@ impl SpaceLocation {
         x
     }
 }
+impl BaseOutput for SpaceLocation {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSpaceVelocity](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSpaceVelocity)"]
@@ -2489,6 +2632,19 @@ impl SpaceVelocity {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SpaceVelocity {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2522,6 +2678,19 @@ impl View {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for View {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2563,6 +2732,19 @@ impl ViewState {
         x
     }
 }
+impl BaseOutput for ViewState {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrViewConfigurationView](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrViewConfigurationView)"]
@@ -2586,6 +2768,19 @@ impl ViewConfigurationView {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ViewConfigurationView {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2777,6 +2972,19 @@ impl FrameState {
         x
     }
 }
+impl BaseOutput for FrameState {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrHapticBaseHeader](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrHapticBaseHeader)"]
@@ -2814,6 +3022,19 @@ pub struct EventDataBuffer {
 }
 impl EventDataBuffer {
     pub const TYPE: StructureType = StructureType::EVENT_DATA_BUFFER;
+}
+impl BaseOutput for EventDataBuffer {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
 }
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
@@ -2916,6 +3137,19 @@ impl ViewConfigurationProperties {
         x
     }
 }
+impl BaseOutput for ViewConfigurationProperties {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrActionStateBoolean](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrActionStateBoolean)"]
@@ -2937,6 +3171,19 @@ impl ActionStateBoolean {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ActionStateBoolean {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -2968,6 +3215,19 @@ impl ActionStateFloat {
         x
     }
 }
+impl BaseOutput for ActionStateFloat {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrActionStateVector2f](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrActionStateVector2f)"]
@@ -2994,6 +3254,19 @@ impl ActionStateVector2f {
         x
     }
 }
+impl BaseOutput for ActionStateVector2f {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrActionStatePose](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrActionStatePose)"]
@@ -3012,6 +3285,19 @@ impl ActionStatePose {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ActionStatePose {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3162,6 +3448,19 @@ impl InteractionProfileState {
         x
     }
 }
+impl BaseOutput for InteractionProfileState {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrActionCreateInfo](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrActionCreateInfo)"]
@@ -3286,6 +3585,19 @@ impl VisibilityMaskKHR {
         x
     }
 }
+impl BaseOutput for VisibilityMaskKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrGraphicsRequirementsOpenGLKHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrGraphicsRequirementsOpenGLKHR) - defined by [XR_KHR_opengl_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_opengl_enable)"]
@@ -3305,6 +3617,19 @@ impl GraphicsRequirementsOpenGLKHR {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for GraphicsRequirementsOpenGLKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3334,6 +3659,19 @@ impl GraphicsRequirementsOpenGLESKHR {
         x
     }
 }
+impl BaseOutput for GraphicsRequirementsOpenGLESKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrGraphicsRequirementsVulkanKHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrGraphicsRequirementsVulkanKHR) - defined by [XR_KHR_vulkan_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_vulkan_enable)"]
@@ -3353,6 +3691,19 @@ impl GraphicsRequirementsVulkanKHR {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for GraphicsRequirementsVulkanKHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3384,6 +3735,20 @@ impl GraphicsRequirementsD3D11KHR {
         x
     }
 }
+#[cfg(windows)]
+impl BaseOutput for GraphicsRequirementsD3D11KHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[doc = "See [XrGraphicsRequirementsD3D12KHR](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrGraphicsRequirementsD3D12KHR) - defined by [XR_KHR_D3D12_enable](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_KHR_D3D12_enable)"]
@@ -3405,6 +3770,20 @@ impl GraphicsRequirementsD3D12KHR {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+#[cfg(windows)]
+impl BaseOutput for GraphicsRequirementsD3D12KHR {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3515,6 +3894,19 @@ impl ViewConfigurationDepthRangeEXT {
         x
     }
 }
+impl BaseOutput for ViewConfigurationDepthRangeEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrViewConfigurationViewFovEPIC](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrViewConfigurationViewFovEPIC) - defined by [XR_EPIC_view_configuration_fov](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_EPIC_view_configuration_fov)"]
@@ -3585,6 +3977,19 @@ impl SystemEyeGazeInteractionPropertiesEXT {
         x
     }
 }
+impl BaseOutput for SystemEyeGazeInteractionPropertiesEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrEyeGazeSampleTimeEXT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrEyeGazeSampleTimeEXT) - defined by [XR_EXT_eye_gaze_interaction](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_eye_gaze_interaction)"]
@@ -3603,6 +4008,19 @@ impl EyeGazeSampleTimeEXT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for EyeGazeSampleTimeEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3683,6 +4101,19 @@ impl SystemHandTrackingPropertiesEXT {
         x
     }
 }
+impl BaseOutput for SystemHandTrackingPropertiesEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrHandTrackerCreateInfoEXT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrHandTrackerCreateInfoEXT) - defined by [XR_EXT_hand_tracking](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking)"]
@@ -3748,6 +4179,19 @@ impl HandJointLocationsEXT {
         x
     }
 }
+impl BaseOutput for HandJointLocationsEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrHandJointVelocitiesEXT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrHandJointVelocitiesEXT) - defined by [XR_EXT_hand_tracking](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_hand_tracking)"]
@@ -3767,6 +4211,19 @@ impl HandJointVelocitiesEXT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for HandJointVelocitiesEXT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3834,6 +4291,19 @@ impl HandMeshMSFT {
         x
     }
 }
+impl BaseOutput for HandMeshMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrHandMeshIndexBufferMSFT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrHandMeshIndexBufferMSFT) - defined by [XR_MSFT_hand_tracking_mesh](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_MSFT_hand_tracking_mesh)"]
@@ -3879,6 +4349,19 @@ impl SystemHandTrackingMeshPropertiesMSFT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SystemHandTrackingMeshPropertiesMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -3932,6 +4415,19 @@ impl SecondaryViewConfigurationStateMSFT {
         x
     }
 }
+impl BaseOutput for SecondaryViewConfigurationStateMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSecondaryViewConfigurationFrameStateMSFT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSecondaryViewConfigurationFrameStateMSFT) - defined by [XR_MSFT_secondary_view_configuration](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_MSFT_secondary_view_configuration)"]
@@ -3951,6 +4447,19 @@ impl SecondaryViewConfigurationFrameStateMSFT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SecondaryViewConfigurationFrameStateMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4054,6 +4563,20 @@ impl SwapchainStateAndroidSurfaceDimensionsFB {
         x
     }
 }
+#[cfg(target_os = "android")]
+impl BaseOutput for SwapchainStateAndroidSurfaceDimensionsFB {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSwapchainStateSamplerOpenGLESFB](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSwapchainStateSamplerOpenGLESFB) - defined by [XR_FB_swapchain_update_state_opengl_es](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_FB_swapchain_update_state_opengl_es)"]
@@ -4081,6 +4604,19 @@ impl SwapchainStateSamplerOpenGLESFB {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SwapchainStateSamplerOpenGLESFB {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4114,6 +4650,19 @@ impl SwapchainStateSamplerVulkanFB {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SwapchainStateSamplerVulkanFB {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4194,6 +4743,19 @@ impl ControllerModelKeyStateMSFT {
         x
     }
 }
+impl BaseOutput for ControllerModelKeyStateMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrControllerModelNodePropertiesMSFT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrControllerModelNodePropertiesMSFT) - defined by [XR_MSFT_controller_model](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_MSFT_controller_model)"]
@@ -4213,6 +4775,19 @@ impl ControllerModelNodePropertiesMSFT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ControllerModelNodePropertiesMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4243,6 +4818,19 @@ impl ControllerModelPropertiesMSFT {
         x
     }
 }
+impl BaseOutput for ControllerModelPropertiesMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrControllerModelNodeStateMSFT](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrControllerModelNodeStateMSFT) - defined by [XR_MSFT_controller_model](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_MSFT_controller_model)"]
@@ -4261,6 +4849,19 @@ impl ControllerModelNodeStateMSFT {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for ControllerModelNodeStateMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4291,6 +4892,19 @@ impl ControllerModelStateMSFT {
         x
     }
 }
+impl BaseOutput for ControllerModelStateMSFT {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSystemColorSpacePropertiesFB](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSystemColorSpacePropertiesFB) - defined by [XR_FB_color_space](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_FB_color_space)"]
@@ -4309,6 +4923,19 @@ impl SystemColorSpacePropertiesFB {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SystemColorSpacePropertiesFB {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
@@ -4360,6 +4987,19 @@ impl FoveatedViewConfigurationViewVARJO {
         x
     }
 }
+impl BaseOutput for FoveatedViewConfigurationViewVARJO {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
+            });
+        }
+        x
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrSystemFoveatedRenderingPropertiesVARJO](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrSystemFoveatedRenderingPropertiesVARJO) - defined by [XR_VARJO_foveated_rendering](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XR_VARJO_foveated_rendering)"]
@@ -4378,6 +5018,19 @@ impl SystemFoveatedRenderingPropertiesVARJO {
             (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
                 ty: Self::TYPE,
                 next,
+            });
+        }
+        x
+    }
+}
+impl BaseOutput for SystemFoveatedRenderingPropertiesVARJO {
+    #[inline]
+    fn base_output() -> MaybeUninit<Self> {
+        let mut x = MaybeUninit::<Self>::uninit();
+        unsafe {
+            (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
+                ty: Self::TYPE,
+                next: std::ptr::null_mut(),
             });
         }
         x
