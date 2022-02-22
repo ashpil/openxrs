@@ -1020,17 +1020,10 @@ impl Parser {
                 handle!(#ident);
             }
         });
-        
-        let out_trait = quote! {
-            pub trait BaseOutput {
-                fn base_output() -> MaybeUninit<Self> where Self: Sized;
-            }
 
-            impl<T: Default> BaseOutput for T {
-                #[inline]
-                fn base_output() -> MaybeUninit<Self> {
-                    MaybeUninit::<Self>::new(Self::default())
-                }
+        let xr_type_trait = quote! {
+            pub trait XrType {
+                const TYPE: StructureType;
             }
         };
 
@@ -1058,28 +1051,13 @@ impl Parser {
             };
             let conditions = conditions(name, s.extension.as_ref().map(|x| &x[..]));
 
-            let out_impl = if let Some(ty) = &s.ty {
-                // are there more cases like this or is it fine to hard code?
-                if s.mut_next || ty == "XR_TYPE_EVENT_DATA_BUFFER" {
-                    let conditions2 = conditions.clone();
-                    quote! {
-                        #conditions2
-                        impl BaseOutput for #ident {
-                            #[inline]
-                            fn base_output() -> MaybeUninit<Self> {
-                                let mut x = MaybeUninit::<Self>::uninit();
-                                unsafe {
-                                    (x.as_mut_ptr() as *mut BaseOutStructure).write(BaseOutStructure {
-                                        ty: Self::TYPE,
-                                        next: std::ptr::null_mut(),
-                                    });
-                                }
-                                x
-                            }
-                        }
+            let xr_type_impl = if let Some(ref ty) = &s.ty {
+                let ty = xr_enum_value_name("XrStructureType", ty);
+                quote! {
+                    #conditions
+                    impl XrType for #ident {
+                        const TYPE: StructureType = StructureType::#ty;
                     }
-                } else {
-                    quote! {}
                 }
             } else {
                 quote! {}
@@ -1133,7 +1111,7 @@ impl Parser {
                     #(#members)*
                 }
                 #ty
-                #out_impl
+                #xr_type_impl
             }
         });
 
@@ -1230,7 +1208,7 @@ impl Parser {
             pub const CURRENT_API_VERSION: Version = Version::new(#major, #minor, #patch);
 
             #(#consts)*
-            #out_trait
+            #xr_type_trait
             #(#enums)*
             #(#bitmasks)*
             #(#handles)*
