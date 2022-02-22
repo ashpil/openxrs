@@ -1036,6 +1036,14 @@ impl Parser {
                     x
                 }
             }
+
+            impl<T: Default> BaseOutput for T {
+                const TYPE: StructureType = StructureType::UNKNOWN;
+
+                fn base_output() -> MaybeUninit<Self> {
+                    MaybeUninit::<Self>::new(Self::default())
+                }
+            }
         };
 
         let structs = self.structs.iter().map(|(name, s)| {

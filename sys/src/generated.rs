@@ -46,6 +46,12 @@ pub trait BaseOutput {
         x
     }
 }
+impl<T: Default> BaseOutput for T {
+    const TYPE: StructureType = StructureType::UNKNOWN;
+    fn base_output() -> MaybeUninit<Self> {
+        MaybeUninit::<Self>::new(Self::default())
+    }
+}
 #[doc = "Structure type enumerant - see [XrStructureType](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrStructureType)"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
