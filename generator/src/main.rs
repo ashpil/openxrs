@@ -1071,7 +1071,7 @@ impl Parser {
             let conditions = conditions(name, s.extension.as_ref().map(|x| &x[..]));
 
             let out_impl = if let Some(ref ty) = &s.ty {
-                if s.mut_next {
+                if s.mut_next || ty == "XR_TYPE_EVENT_DATA_BUFFER" {
                     let ty = xr_enum_value_name("XrStructureType", ty);
                     quote! {
                         #conditions

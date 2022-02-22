@@ -2884,6 +2884,9 @@ pub struct EventDataBuffer {
 impl EventDataBuffer {
     pub const TYPE: StructureType = StructureType::EVENT_DATA_BUFFER;
 }
+impl BaseOutput for EventDataBuffer {
+    const TYPE: StructureType = StructureType::EVENT_DATA_BUFFER;
+}
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 #[doc = "See [XrEventDataEventsLost](https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrEventDataEventsLost)"]
